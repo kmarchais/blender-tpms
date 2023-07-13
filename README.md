@@ -2,9 +2,6 @@
 ## Triply Periodic Minimal Surface
 
 How to create a TPMS mesh in Blender: 
-[![Watch the video](https://img.youtube.com/vi/wNZWhSXlVyA/mqdefault.jpg)](https://youtu.be/wNZWhSXlVyA)
-
-
 https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea5-072051c4b2e1
 
 
