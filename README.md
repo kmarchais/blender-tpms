@@ -1,7 +1,8 @@
 # TPMS generator
 ## Triply Periodic Minimal Surface
 
-<iframe width="100%" height="45%" src="https://www.youtube.com/embed/wNZWhSXlVyA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+How to create a TPMS mesh in Blender: 
+[![Watch the video](https://img.youtube.com/vi/wNZWhSXlVyA/mqdefault.jpg)](https://youtu.be/wNZWhSXlVyA)
 
 ## Installation
 - Download the ZIP file from this repository
