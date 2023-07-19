@@ -113,9 +113,20 @@ class TpmsGradingProperties(bpy.types.PropertyGroup):
     surface_grading: StringProperty(
         name="Surface grading",
         description="Surface grading",
+        default="sin(x) * cos(y) + sin(y) * cos(z) + sin(z) * cos(x)",
     )
 
     offset_grading: StringProperty(
         name="Offset grading",
         description="Offset grading",
+        default="a + (b - a) * x",
+    )
+
+    edges: FloatVectorProperty(
+        name="Edges (a, b)",
+        description="Min (a) and max (b) offset values",
+        size=2,
+        default=(0.3, 1.5),
+        min=0.01,
+        options={'ANIMATABLE'},
     )

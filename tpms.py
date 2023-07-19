@@ -148,3 +148,17 @@ class CylindricalTpms(Tpms):
         theta = y * self.unit_theta
 
         return pv.StructuredGrid(rho * np.cos(theta), rho * np.sin(theta), z)
+
+
+class GradedTpms(Tpms):
+    def __init__(self, part, surface, cell_size, repeat_cell, resolution, offset, phase_shift, offset_grading, edges):
+        super().__init__(part, surface, cell_size, repeat_cell, resolution, offset, phase_shift)
+        self.offset_grading = offset_grading
+        self.edges = edges
+
+    def _create_grid(self, x, y, z):
+        a = self.edges[0]
+        b = self.edges[1]
+        print(self.offset_grading)
+        self.offset = eval(self.offset_grading)
+        return pv.StructuredGrid(x, y, z)
