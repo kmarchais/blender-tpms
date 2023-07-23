@@ -1,5 +1,6 @@
+from ast import literal_eval
+
 import numpy as np
-from numpy import pi
 import pyvista as pv
 
 from . import surfaces
@@ -139,7 +140,7 @@ class CylindricalTpms(Tpms):
     def relative_density(self):
         if self._relative_density is not None:
             return self._relative_density
-        grid_volume = 4.0 * self.cylinder_radius * self.cell_size[0] * self.unit_theta * self.cell_size[2] * np.prod(self.repeat_cell)
+        grid_volume = self.cylinder_radius * self.cell_size[0] * self.unit_theta * self.cell_size[2] * np.prod(self.repeat_cell)
         self._relative_density = self.vtk_mesh.volume / grid_volume
         return self._relative_density
 
@@ -159,6 +160,5 @@ class GradedTpms(Tpms):
     def _create_grid(self, x, y, z):
         a = self.edges[0]
         b = self.edges[1]
-        print(self.offset_grading)
-        self.offset = eval(self.offset_grading)
+        self.offset = literal_eval(self.offset_grading)
         return pv.StructuredGrid(x, y, z)

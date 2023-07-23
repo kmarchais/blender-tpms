@@ -119,7 +119,7 @@ class TpmsGradingProperties(bpy.types.PropertyGroup):
     offset_grading: StringProperty(
         name="Offset grading",
         description="Offset grading",
-        default="a + (b - a) * x",
+        default="(b - a) * x + (a + b) / 2",
     )
 
     edges: FloatVectorProperty(

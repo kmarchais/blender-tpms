@@ -1,11 +1,11 @@
 # TPMS generator
+
+![TPMS](assets/geo_nodes.png)
 ## Triply Periodic Minimal Surface
 
-How to create a TPMS mesh in Blender: 
+How to create a TPMS mesh in Blender:
 
 https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea5-072051c4b2e1
-
-
 ## Installation
 - Download the ZIP file from this repository
 - In Blender, `Edit > Preferences > Add-ons > Install...` find the zip file that you just downloaded and click `Install Add-on`
