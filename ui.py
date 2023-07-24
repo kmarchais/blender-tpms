@@ -4,7 +4,12 @@ from bpy_extras.object_utils import AddObjectHelper, object_data_add
 import numpy as np
 
 from .Tpms import Tpms, CylindricalTpms, GradedTpms
-from .properties import TpmsProperties, CylindricalTpmsProperties, TpmsGradingProperties, OperatorProperties
+from .properties import (
+    TpmsProperties,
+    CylindricalTpmsProperties,
+    TpmsGradingProperties,
+    OperatorProperties,
+)
 
 
 def polydata_to_mesh(polydata, mesh_name="Tpms"):
