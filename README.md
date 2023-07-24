@@ -1,7 +1,7 @@
 # TPMS generator
 
 ![TPMS](assets/geo_nodes.png)
-![Lattices](assets/lattices.png)
+![Lattices](assets/lattice.png)
 
 ## Triply Periodic Minimal Surface
 
