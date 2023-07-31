@@ -3,7 +3,7 @@ from bpy_extras.object_utils import AddObjectHelper, object_data_add
 
 import numpy as np
 
-from .Tpms import Tpms, CylindricalTpms, GradedTpms
+from .tpms import Tpms, CylindricalTpms, GradedTpms
 from .properties import (
     TpmsProperties,
     CylindricalTpmsProperties,
