@@ -113,44 +113,11 @@ def SC(x, y, z):
         cos(x) * cos(y) + cos(y) * cos(z) + cos(z) * cos(x)
     )
 
-def BCC(x, y, z):
-    return (
-        cos(2 * x) + cos(2 * y) + cos(2 * z) -
-        2 * (cos(x) * cos(y) + cos(y) * cos(z) + cos(z) * cos(x))
-    )
-
 def I(x, y, z):
     return cos(x) * cos(y) + cos(y) * cos(z) + cos(z) * cos(x)
 
-def O(x, y, z):
-    return (
-        4 * (cos(x) * cos(y) + cos(y) * cos(z) + cos(z) * cos(x)) -
-        3 * (cos(x) + cos(y) + cos(z))
-    )
-
-def L(x, y, z):
-    return (
-        (sin(2 * x) * cos(y) * sin(z) +
-         sin(2 * y) * cos(z) * sin(x) +
-         sin(2 * z) * cos(x) * sin(y)) -
-        (cos(2 * x) * cos(2 * y) +
-         cos(2 * y) * cos(2 * z) +
-         cos(2 * z) * cos(2 * x))
-    )
-
-def SP(x, y, z):
-    return (
-        1.1 * (sin(2 * x) * cos(y) * sin(z) + sin(2 * y) * cos(z) * sin(x) + sin(2 * z) * cos(x) * sin(y)) -
-        0.2 * (cos(2 * x) * cos(2 * y) + cos(2 * y) * cos(2 * z) + cos(2 * z) * cos(2 * x)) -
-        0.4 * (cos(2 * x) + cos(2 * y) + cos(2 * z))
-    )
-
 def P(x, y, z):
     return sin(x) + sin(y) + sin(z)
-
-
-def IWP(x, y, z):
-    return cos(x) * cos(y) + cos(y) * cos(z) + cos(z) * cos(x) - 3 * cos(x) * cos(y) * cos(z)
 
 
 def P_W(x, y, z):
@@ -159,11 +126,11 @@ def P_W(x, y, z):
 
 def double_gyroid(x, y, z):
     return (
-        2.75 * (sin(2*x) * sin(z) * cos(y) +
-                sin(2*y) * sin(x) * cos(z) +
-                sin(2*z) * sin(y) * cos(x)) -
-        (cos(2*x) * cos(2*y) +
-         cos(2*y) * cos(2 * z) +
+        2.75 * (sin(2 * x) * sin(z) * cos(y) +
+                sin(2 * y) * sin(x) * cos(z) +
+                sin(2 * z) * sin(y) * cos(x)) -
+        (cos(2 * x) * cos(2 * y) +
+         cos(2 * y) * cos(2 * z) +
          cos(2 * z) * cos(2 * x))
     )
 
@@ -172,10 +139,10 @@ def Gprime(x, y, z):
     return (
         5 * (sin(2 * x) * sin(z) * cos(y) +
              sin(2 * y) * sin(x) * cos(z) +
-             sin(2*z) * sin(y) * cos(x)) +
-        cos(2*x) * cos(2*y) +
-        cos(2*y) * cos(2*z) +
-        cos(2*z)*cos(2*x)
+             sin(2 * z) * sin(y) * cos(x)) +
+        cos(2 * x) * cos(2 * y) +
+        cos(2 * y) * cos(2 * z) +
+        cos(2 * z) * cos(2 * x)
     )
 
 

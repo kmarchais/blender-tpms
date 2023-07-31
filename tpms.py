@@ -6,9 +6,10 @@ import pyvista as pv
 from . import surfaces
 
 class Tpms:
-    def __init__(self, part, surface, cell_size, repeat_cell, resolution, offset, phase_shift):
+    def __init__(self, part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift):
         self.part = part
         self.surface_function = getattr(surfaces, surface)
+        self.swap = swap
         self.repeat_cell = np.array(repeat_cell)
         self.cell_size = np.array(cell_size)
         self.resolution = resolution
@@ -118,13 +119,19 @@ class Tpms:
             k_y * (y + self.phase_shift[1]),
             k_z * (z + self.phase_shift[2]),
         )
+        if self.swap:
+            surface_function = self.surface_function(
+                k_y * (y + self.phase_shift[1]),
+                k_z * (z + self.phase_shift[2]),
+                k_x * (x + self.phase_shift[0]),
+            )
 
         self.grid["surface"] = surface_function.ravel(order="F")
         self.grid["lower_surface"] = (surface_function - 0.5 * self.offset).ravel(order="F")
         self.grid["upper_surface"] = (surface_function + 0.5 * self.offset).ravel(order="F")
 
 class CylindricalTpms(Tpms):
-    def __init__(self, radius, part, surface, cell_size, repeat_cell, resolution, offset, phase_shift):
+    def __init__(self, radius, part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift):
         unit_theta = cell_size[1] / radius
         n_repeat_to_full_circle = int(round(2 * np.pi / unit_theta))
         unit_theta = 2 * np.pi / n_repeat_to_full_circle
@@ -132,7 +139,7 @@ class CylindricalTpms(Tpms):
         if repeat_cell[1] == 0 or repeat_cell[1] > n_repeat_to_full_circle:
             repeat_cell[1] = n_repeat_to_full_circle
 
-        super().__init__(part, surface, cell_size, repeat_cell, resolution, offset, phase_shift)
+        super().__init__(part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift)
         self.cylinder_radius = radius
         self.unit_theta = unit_theta
 
@@ -151,14 +158,14 @@ class CylindricalTpms(Tpms):
         return pv.StructuredGrid(rho * np.cos(theta), rho * np.sin(theta), z)
 
 
-class GradedTpms(Tpms):
-    def __init__(self, part, surface, cell_size, repeat_cell, resolution, offset, phase_shift, offset_grading, edges):
-        super().__init__(part, surface, cell_size, repeat_cell, resolution, offset, phase_shift)
-        self.offset_grading = offset_grading
-        self.edges = edges
+# class GradedTpms(Tpms):
+#     def __init__(self, part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift, offset_grading, edges):
+#         super().__init__(part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift)
+#         self.offset_grading = offset_grading
+#         self.edges = edges
 
-    def _create_grid(self, x, y, z):
-        a = self.edges[0]
-        b = self.edges[1]
-        self.offset = literal_eval(self.offset_grading)
-        return pv.StructuredGrid(x, y, z)
+#     def _create_grid(self, x, y, z):
+#         a = self.edges[0]
+#         b = self.edges[1]
+#         self.offset = literal_eval(self.offset_grading)
+#         return pv.StructuredGrid(x, y, z)

@@ -66,6 +66,13 @@ class TpmsProperties(bpy.types.PropertyGroup):
         items=list_tpms,
         name="Surface",
         description="Tpms surface",
+        default="gyroid",
+    )
+
+    swap: BoolProperty(
+        name="Swap axes",
+        description="Swap axes",
+        default=False,
     )
 
     offset: FloatProperty(
@@ -109,24 +116,24 @@ class CylindricalTpmsProperties(bpy.types.PropertyGroup):
     )
 
 
-class TpmsGradingProperties(bpy.types.PropertyGroup):
-    surface_grading: StringProperty(
-        name="Surface grading",
-        description="Surface grading",
-        default="sin(x) * cos(y) + sin(y) * cos(z) + sin(z) * cos(x)",
-    )
+# class TpmsGradingProperties(bpy.types.PropertyGroup):
+#     surface_grading: StringProperty(
+#         name="Surface grading",
+#         description="Surface grading",
+#         default="sin(x) * cos(y) + sin(y) * cos(z) + sin(z) * cos(x)",
+#     )
 
-    offset_grading: StringProperty(
-        name="Offset grading",
-        description="Offset grading",
-        default="(b - a) * x + (a + b) / 2",
-    )
+#     offset_grading: StringProperty(
+#         name="Offset grading",
+#         description="Offset grading",
+#         default="(b - a) * x + (a + b) / 2",
+#     )
 
-    edges: FloatVectorProperty(
-        name="Edges (a, b)",
-        description="Min (a) and max (b) offset values",
-        size=2,
-        default=(0.3, 1.5),
-        min=0.01,
-        options={'ANIMATABLE'},
-    )
+#     edges: FloatVectorProperty(
+#         name="Edges (a, b)",
+#         description="Min (a) and max (b) offset values",
+#         size=2,
+#         default=(0.3, 1.5),
+#         min=0.01,
+#         options={'ANIMATABLE'},
+#     )

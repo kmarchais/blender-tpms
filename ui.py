@@ -3,13 +3,18 @@ from bpy_extras.object_utils import AddObjectHelper, object_data_add
 
 import numpy as np
 
-from .tpms import Tpms, CylindricalTpms, GradedTpms
+from .tpms import (
+    Tpms,
+    CylindricalTpms,
+    # GradedTpms,
+)
 from .properties import (
     TpmsProperties,
     CylindricalTpmsProperties,
-    TpmsGradingProperties,
+    # TpmsGradingProperties,
     OperatorProperties,
 )
+from .material import apply_material
 
 
 def polydata_to_mesh(polydata, mesh_name="Tpms"):
@@ -35,6 +40,7 @@ class OperatorTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, Tpms
         tpms = Tpms(
             self.part,
             self.surface,
+            self.swap,
             self.cell_size,
             self.repeat_cell,
             self.resolution,
@@ -49,13 +55,15 @@ class OperatorTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, Tpms
         # add the mesh as an object into the scene with this utility module
         object_data_add(context, mesh, operator=self)
 
+        attr_name = "surface"
+        mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
+        mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+
         if self.auto_smooth:
             bpy.ops.object.shade_smooth(use_auto_smooth=True)
 
         if self.material:
-            attr_name = "surface"
-            mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-            mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+            apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
 
         return {'FINISHED'}
 
@@ -70,6 +78,7 @@ class OperatorCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectH
             self.radius,
             self.part,
             self.surface,
+            self.swap,
             self.cell_size,
             self.repeat_cell,
             self.resolution,
@@ -84,62 +93,66 @@ class OperatorCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectH
         # add the mesh as an object into the scene with this utility module
         object_data_add(context, mesh, operator=self)
 
-        if self.auto_smooth:
-            bpy.ops.object.shade_smooth(use_auto_smooth=True)
-
-        if self.material:
-            attr_name = "surface"
-            mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-            mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
-
-        return {'FINISHED'}
-
-
-class OperatorGradedTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties):
-    """Add a Graded TPMS mesh"""
-    bl_idname = "mesh.graded_tpms_add"
-    bl_label = "Graded TPMS"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        tpms = GradedTpms(
-            self.part,
-            self.surface,
-            self.cell_size,
-            self.repeat_cell,
-            self.resolution,
-            self.offset,
-            self.phase_shift,
-            self.offset_grading,
-            self.edges,
-        )
-
-        mesh = polydata_to_mesh(tpms.vtk_mesh)
-
-        self.density = f"{tpms.relative_density:.1%}"
-
-        # add the mesh as an object into the scene with this utility module
-        object_data_add(context, mesh, operator=self)
+        attr_name = "surface"
+        mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
+        mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
             bpy.ops.object.shade_smooth(use_auto_smooth=True)
 
         if self.material:
-            attr_name = "surface"
-            mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-            mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+            apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
 
         return {'FINISHED'}
 
+# class OperatorGradedTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties):
+#     """Add a Graded TPMS mesh"""
+#     bl_idname = "mesh.graded_tpms_add"
+#     bl_label = "Graded TPMS"
+#     bl_options = {'REGISTER', 'UNDO'}
 
-class OperatorGradedCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties, CylindricalTpmsProperties):
-    """Add a Graded Cylindrical TPMS mesh"""
-    bl_idname = "mesh.cylindrical_graded_tpms_add"
-    bl_label = "Graded Cylindrical TPMS"
-    bl_options = {'REGISTER', 'UNDO'}
+#     def execute(self, context):
+#         tpms = GradedTpms(
+#             self.part,
+#             self.surface,
+#             self.swap,
+#             self.cell_size,
+#             self.repeat_cell,
+#             self.resolution,
+#             self.offset,
+#             self.phase_shift,
+#             self.offset_grading,
+#             self.edges,
+#         )
 
-    def execute(self, context):
-        return {'FINISHED'}
+#         mesh = polydata_to_mesh(tpms.vtk_mesh)
+
+#         self.density = f"{tpms.relative_density:.1%}"
+
+#         # add the mesh as an object into the scene with this utility module
+#         object_data_add(context, mesh, operator=self)
+
+#         attr_name = "surface"
+#         mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
+#         mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+
+#         if self.auto_smooth:
+#             bpy.ops.object.shade_smooth(use_auto_smooth=True)
+
+#         if self.material:
+#             apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
+
+#         return {'FINISHED'}
+
+
+# class OperatorGradedCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties, CylindricalTpmsProperties):
+#     """Add a Graded Cylindrical TPMS mesh"""
+#     bl_idname = "mesh.cylindrical_graded_tpms_add"
+#     bl_label = "Graded Cylindrical TPMS"
+#     bl_options = {'REGISTER', 'UNDO'}
+
+#     def execute(self, context):
+#         return {'FINISHED'}
 
 
 def menu_func(self, context):
@@ -155,15 +168,15 @@ class OBJECT_MT_tpms_submenu(bpy.types.Menu):
         layout = self.layout
         layout.operator(OperatorTpms.bl_idname, icon='MESH_CUBE')
         layout.operator(OperatorCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
-        layout.operator(OperatorGradedTpms.bl_idname, icon='MESH_CUBE')
-        layout.operator(OperatorGradedCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
+        # layout.operator(OperatorGradedTpms.bl_idname, icon='MESH_CUBE')
+        # layout.operator(OperatorGradedCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
 
 def register():
     bpy.utils.register_class(OBJECT_MT_tpms_submenu)
     bpy.utils.register_class(OperatorTpms)
     bpy.utils.register_class(OperatorCylindricalTpms)
-    bpy.utils.register_class(OperatorGradedTpms)
-    bpy.utils.register_class(OperatorGradedCylindricalTpms)
+    # bpy.utils.register_class(OperatorGradedTpms)
+    # bpy.utils.register_class(OperatorGradedCylindricalTpms)
     bpy.types.VIEW3D_MT_mesh_add.append(menu_func)
 
 
@@ -171,6 +184,6 @@ def unregister():
     bpy.utils.unregister_class(OBJECT_MT_tpms_submenu)
     bpy.utils.unregister_class(OperatorTpms)
     bpy.utils.unregister_class(OperatorCylindricalTpms)
-    bpy.utils.unregister_class(OperatorGradedTpms)
-    bpy.utils.unregister_class(OperatorGradedCylindricalTpms)
+    # bpy.utils.unregister_class(OperatorGradedTpms)
+    # bpy.utils.unregister_class(OperatorGradedCylindricalTpms)
     bpy.types.VIEW3D_MT_mesh_add.remove(menu_func)
