@@ -57,4 +57,4 @@ def apply_material(mesh, tpms, attr_name, colormap, n_colors):
     material.node_tree.links.new(color_ramp_node.outputs["Color"], bsdf.inputs["Base Color"])
     material.node_tree.links.new(bsdf.outputs["BSDF"], material_output_node.inputs["Surface"])
 
-    bpy.data.objects[mesh.name].data.materials.append(material)import bpy
+    bpy.data.objects[mesh.name].data.materials.append(material)
