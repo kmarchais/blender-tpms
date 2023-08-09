@@ -1,12 +1,14 @@
-def install_dependencies():
-    import sys, subprocess
-    for dependency in dependencies.keys():
-        if dependency != 'pip':
-            subprocess.call([sys.executable, "-m", "pip", "install", *dependencies])
-
 dependencies = {'pip': {},
                 'pyvista': {"url": "https://github.com/pyvista/pyvista"},}
-install_dependencies()
+
+for dependency in dependencies:
+    if dependency != 'pip':
+        try:
+            __import__(dependency)
+        except ImportError:
+            import sys, subprocess
+            subprocess.call([sys.executable, "-m", "pip", "install", dependency])
+
 
 from . import ui
 
