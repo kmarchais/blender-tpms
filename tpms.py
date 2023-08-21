@@ -35,7 +35,6 @@ class Tpms:
             .clip_scalar(scalars="lower_surface")
             .extract_surface()
         )
-        self._sheet.flip_normals()
         return self._sheet
 
     @property
@@ -47,7 +46,6 @@ class Tpms:
             .clip_scalar(scalars="lower_surface", invert=False)
             .extract_surface()
         )
-        self._lower_skeletal.flip_normals()
         return self._lower_skeletal
 
     @property
@@ -59,7 +57,6 @@ class Tpms:
             .clip_scalar(scalars="upper_surface")
             .extract_surface()
         )
-        self._upper_skeletal.flip_normals()
         return self._upper_skeletal
 
     @property

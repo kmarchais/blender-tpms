@@ -22,6 +22,7 @@ def polydata_to_mesh(polydata, mesh_name="Tpms"):
     faces = []
     if not polydata.is_all_triangles:
         polydata = polydata.triangulate()
+    polydata.flip_normals()
     faces = np.reshape(polydata.faces, (polydata.n_faces, 4))[:, 1:]
 
     mesh = bpy.data.meshes.new(mesh_name)
