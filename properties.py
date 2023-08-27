@@ -1,4 +1,5 @@
 from inspect import getmembers, isfunction
+import itertools
 
 import bpy
 
@@ -23,12 +24,14 @@ class OperatorProperties(bpy.types.PropertyGroup):
         name="Auto Smooth",
         description="Auto smooth",
         default=True,
+        options={'SKIP_SAVE'},
     )
 
     material: BoolProperty(
         name="Apply Material",
         description="Apply material",
         default=False,
+        options={'SKIP_SAVE'},
     )
 
 class TpmsProperties(bpy.types.PropertyGroup):
@@ -42,6 +45,7 @@ class TpmsProperties(bpy.types.PropertyGroup):
         ],
         name="Part",
         description="Part of the TPMS to generate",
+        options={'SKIP_SAVE'},
     )
 
     cell_size: FloatVectorProperty(
@@ -50,7 +54,7 @@ class TpmsProperties(bpy.types.PropertyGroup):
         description="Dimensions of a unit cell",
         default=(1, 1, 1),
         min=0,
-        options={'ANIMATABLE'},
+        options={'ANIMATABLE', 'SKIP_SAVE'},
     )
 
     repeat_cell: IntVectorProperty(
@@ -59,7 +63,7 @@ class TpmsProperties(bpy.types.PropertyGroup):
         description="Number of repetitions of a cell in each direction",
         default=(1, 1, 1),
         min=1,
-        options={'ANIMATABLE'},
+        options={'ANIMATABLE', 'SKIP_SAVE'},
     )
 
     surface: EnumProperty(
@@ -67,12 +71,17 @@ class TpmsProperties(bpy.types.PropertyGroup):
         name="Surface",
         description="Tpms surface",
         default="gyroid",
+        options={'SKIP_SAVE'},
     )
 
-    swap: BoolProperty(
+    swap: EnumProperty(
         name="Swap axes",
         description="Swap axes",
-        default=False,
+        default="XYZ",
+        items=[
+            3 * ("".join(xyz),) for xyz in itertools.permutations("XYZ")
+        ],
+        options={'SKIP_SAVE'},
     )
 
     offset: FloatProperty(
@@ -80,7 +89,7 @@ class TpmsProperties(bpy.types.PropertyGroup):
         description="Thickness of TPMS",
         default=0.3,
         min=0.01,
-        options={'ANIMATABLE'},
+        options={'ANIMATABLE', 'SKIP_SAVE'},
     )
 
     phase_shift: FloatVectorProperty(
@@ -88,7 +97,7 @@ class TpmsProperties(bpy.types.PropertyGroup):
         subtype="XYZ",
         description="x = x + phi_x, y = y + phi_y, z = z + phi_z",
         default=(0, 0, 0),
-        options={'ANIMATABLE'},
+        options={'ANIMATABLE', 'SKIP_SAVE'},
     )
 
     resolution: IntProperty(
@@ -97,7 +106,7 @@ class TpmsProperties(bpy.types.PropertyGroup):
         default=10,
         soft_max=50,
         min=10,
-        options={'ANIMATABLE'},
+        options={'ANIMATABLE', 'SKIP_SAVE'},
     )
 
     density: StringProperty(
@@ -112,7 +121,7 @@ class CylindricalTpmsProperties(bpy.types.PropertyGroup):
         description="Radius of the cylinder",
         default=1,
         min=0.5,
-        options={'ANIMATABLE'},
+        options={'ANIMATABLE', 'SKIP_SAVE'},
     )
 
 

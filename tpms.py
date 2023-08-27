@@ -1,4 +1,5 @@
 from ast import literal_eval
+import itertools
 
 import numpy as np
 import pyvista as pv
@@ -114,17 +115,15 @@ class Tpms:
         self.grid = self._create_grid(x, y, z)
 
         k_x, k_y, k_z = 2.0 * np.pi / self.cell_size
-        surface_function = self.surface_function(
-            k_x * (x + self.phase_shift[0]),
-            k_y * (y + self.phase_shift[1]),
-            k_z * (z + self.phase_shift[2]),
-        )
-        if self.swap:
-            surface_function = self.surface_function(
-                k_y * (y + self.phase_shift[1]),
-                k_z * (z + self.phase_shift[2]),
-                k_x * (x + self.phase_shift[0]),
-            )
+        xyz = {
+            "X": k_x * (x + self.phase_shift[0]),
+            "Y": k_y * (y + self.phase_shift[1]),
+            "Z": k_z * (z + self.phase_shift[2]),
+        }
+        for perm in itertools.permutations("XYZ"):
+            if self.swap == "".join(perm):
+                surface_function = self.surface_function(*(xyz[axis] for axis in perm))
+                break
 
         self.grid["surface"] = surface_function.ravel(order="F")
         self.grid["lower_surface"] = (surface_function - 0.5 * self.offset).ravel(order="F")
@@ -135,7 +134,6 @@ class CylindricalTpms(Tpms):
         unit_theta = cell_size[1] / radius
         n_repeat_to_full_circle = int(round(2 * np.pi / unit_theta))
         unit_theta = 2 * np.pi / n_repeat_to_full_circle
-        # cell_size[1] = unit_theta * radius # TODO : check if this is correct
         if repeat_cell[1] == 0 or repeat_cell[1] > n_repeat_to_full_circle:
             repeat_cell[1] = n_repeat_to_full_circle
 
