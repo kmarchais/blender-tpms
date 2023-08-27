@@ -1,6 +1,7 @@
 # TPMS generator
 
 ![TPMS](assets/geo_nodes.png)
+![Cylinder](assets/cylinder_gyroid_honeycomb.png)
 
 ## Triply Periodic Minimal Surface
 
