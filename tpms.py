@@ -32,8 +32,8 @@ class Tpms:
             return self._sheet
         self._sheet = (
             self.grid
-            .clip_scalar(scalars="upper_surface", invert=False)
-            .clip_scalar(scalars="lower_surface")
+            .clip_scalar(scalars="upper_surface")
+            .clip_scalar(scalars="lower_surface", invert=False)
             .extract_surface()
         )
         return self._sheet
@@ -44,7 +44,7 @@ class Tpms:
             return self._lower_skeletal
         self._lower_skeletal = (
             self.grid
-            .clip_scalar(scalars="lower_surface", invert=False)
+            .clip_scalar(scalars="lower_surface")
             .extract_surface()
         )
         return self._lower_skeletal
@@ -55,7 +55,7 @@ class Tpms:
             return self._upper_skeletal
         self._upper_skeletal = (
             self.grid
-            .clip_scalar(scalars="upper_surface")
+            .clip_scalar(scalars="upper_surface", invert=False)
             .extract_surface()
         )
         return self._upper_skeletal
@@ -126,8 +126,8 @@ class Tpms:
                 break
 
         self.grid["surface"] = surface_function.ravel(order="F")
-        self.grid["lower_surface"] = (surface_function - 0.5 * self.offset).ravel(order="F")
-        self.grid["upper_surface"] = (surface_function + 0.5 * self.offset).ravel(order="F")
+        self.grid["lower_surface"] = (surface_function + 0.5 * self.offset).ravel(order="F")
+        self.grid["upper_surface"] = (surface_function - 0.5 * self.offset).ravel(order="F")
 
 class CylindricalTpms(Tpms):
     def __init__(self, radius, part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift):
@@ -156,6 +156,42 @@ class CylindricalTpms(Tpms):
         return pv.StructuredGrid(rho * np.cos(theta), rho * np.sin(theta), z)
 
 
+class SphericalTpms(Tpms):
+    def __init__(self, radius, part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift):
+        unit_theta = cell_size[1] / radius
+        n_repeat_theta_to_join = int(np.pi / unit_theta)
+        unit_theta = np.pi / n_repeat_theta_to_join
+        if repeat_cell[1] == 0 or repeat_cell[1] > n_repeat_theta_to_join:
+            repeat_cell[1] = n_repeat_theta_to_join
+
+        unit_phi = cell_size[2] / radius
+        n_repeat_phi_to_join = int(2 * np.pi / unit_phi)
+        unit_phi = 2 * np.pi / n_repeat_phi_to_join
+        if repeat_cell[2] == 0 or repeat_cell[2] > n_repeat_phi_to_join:
+            repeat_cell[2] = n_repeat_phi_to_join
+
+        super().__init__(part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift)
+        self.sphere_radius = radius
+        self.unit_theta = unit_theta
+        self.unit_phi = unit_phi
+
+    @property
+    def relative_density(self):
+        if self._relative_density is not None:
+            return self._relative_density
+        self._relative_density = self.vtk_mesh.volume / abs(self.grid.volume)
+        return self._relative_density
+
+    def _create_grid(self, x, y, z):
+        rho = x + self.sphere_radius
+        theta = y * self.unit_theta + np.pi / 2.0
+        phi = z * self.unit_phi
+
+        return pv.StructuredGrid(
+            rho * np.sin(theta) * np.cos(phi),
+            rho * np.sin(theta) * np.sin(phi),
+            rho * np.cos(theta),
+        )
 # class GradedTpms(Tpms):
 #     def __init__(self, part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift, offset_grading, edges):
 #         super().__init__(part, surface, swap, cell_size, repeat_cell, resolution, offset, phase_shift)

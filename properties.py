@@ -125,6 +125,16 @@ class CylindricalTpmsProperties(bpy.types.PropertyGroup):
     )
 
 
+class SphericalTpmsProperties(bpy.types.PropertyGroup):
+    radius: FloatProperty(
+        name="Radius",
+        description="Radius of the sphere",
+        default=1,
+        min=0.5,
+        options={'ANIMATABLE', 'SKIP_SAVE'},
+    )
+
+
 # class TpmsGradingProperties(bpy.types.PropertyGroup):
 #     surface_grading: StringProperty(
 #         name="Surface grading",
