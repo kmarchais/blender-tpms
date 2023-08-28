@@ -23,7 +23,6 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 ## Coming Soon
 - Lattice structures ![Lattices](assets/lattice.png)
 - Graded TPMS (density, size, type)
-- Spherical coordinates
 - Ability to modify the TPMS properties even when the operator is not active anymore
 
 If you have a specific feature in mind that you would like to have, or if you're particularly interested in one of the features listed above, please let me know.
