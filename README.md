@@ -26,3 +26,6 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 - Ability to modify the TPMS properties even when the operator is not active anymore
 
 If you have a specific feature in mind that you would like to have, or if you're particularly interested in one of the features listed above, please let me know.
+
+## Useful repository
+- To create TPMS geometries and meshes (including periodical meshes) for simulation with Python, consider using [Microgen](https://github.com/3MAH/microgen)
