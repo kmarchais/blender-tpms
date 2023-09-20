@@ -1,7 +1,10 @@
 # TPMS generator
 
 ![TPMS](assets/geo_nodes.png)
-![Cylinder](assets/cylinder_gyroid_honeycomb.png)
+<div>
+  <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/df72dbd8-f8d9-4ea8-bb89-02318534f655" width="49%"/>
+  <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/e900a3d5-02f0-4d76-9775-b54b60c139af" width="49%"/>
+</div>
 
 ## Triply Periodic Minimal Surface
 
@@ -20,7 +23,9 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 ## Coming Soon
 - Lattice structures ![Lattices](assets/lattice.png)
 - Graded TPMS (density, size, type)
-- Spherical coordinates
 - Ability to modify the TPMS properties even when the operator is not active anymore
 
 If you have a specific feature in mind that you would like to have, or if you're particularly interested in one of the features listed above, please let me know.
+
+## Useful repository
+- To create TPMS geometries and meshes (including periodical meshes) for simulation with Python, consider using [Microgen](https://github.com/3MAH/microgen)
