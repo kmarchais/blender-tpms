@@ -33,11 +33,15 @@ def polydata_to_mesh(polydata, mesh_name="Tpms"):
 
     return mesh
 
-class OperatorTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsProperties):
+
+class OperatorTpms(
+    bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsProperties
+):
     """Add a TPMS mesh"""
+
     bl_idname = "mesh.tpms_add"
     bl_label = "TPMS"
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
         tpms = Tpms(
@@ -48,7 +52,7 @@ class OperatorTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, Tpms
             self.repeat_cell,
             self.resolution,
             self.offset,
-            self.phase_shift
+            self.phase_shift,
         )
 
         mesh = polydata_to_mesh(tpms.vtk_mesh)
@@ -59,34 +63,48 @@ class OperatorTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, Tpms
         object_data_add(context, mesh, operator=self)
 
         attr_name = "surface"
-        mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-        mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+        mesh.attributes.new(attr_name, type="FLOAT", domain="POINT")
+        mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
             bpy.ops.object.shade_smooth(use_auto_smooth=True)
 
         if self.material:
-            apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
+            apply_material(
+                mesh=mesh,
+                tpms=tpms,
+                attr_name=attr_name,
+                colormap="coolwarm",
+                n_colors=9,
+            )
 
-        return {'FINISHED'}
+        return {"FINISHED"}
 
-class OperatorCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsProperties, CylindricalTpmsProperties):
+
+class OperatorCylindricalTpms(
+    bpy.types.Operator,
+    OperatorProperties,
+    AddObjectHelper,
+    TpmsProperties,
+    CylindricalTpmsProperties,
+):
     """Add a Cylindrical TPMS mesh"""
+
     bl_idname = "mesh.cylindrical_tpms_add"
     bl_label = "Cylindrical TPMS"
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
         tpms = CylindricalTpms(
-            self.radius,
-            self.part,
-            self.surface,
-            self.swap,
-            self.cell_size,
-            self.repeat_cell,
-            self.resolution,
-            self.offset,
-            self.phase_shift
+            radius=self.radius,
+            part=self.part,
+            surface=self.surface,
+            swap=self.swap,
+            cell_size=self.cell_size,
+            repeat_cell=self.repeat_cell,
+            resolution=self.resolution,
+            offset=self.offset,
+            phase_shift=self.phase_shift,
         )
 
         mesh = polydata_to_mesh(tpms.vtk_mesh)
@@ -97,34 +115,48 @@ class OperatorCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectH
         object_data_add(context, mesh, operator=self)
 
         attr_name = "surface"
-        mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-        mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+        mesh.attributes.new(attr_name, type="FLOAT", domain="POINT")
+        mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
             bpy.ops.object.shade_smooth(use_auto_smooth=True)
 
         if self.material:
-            apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
+            apply_material(
+                mesh=mesh,
+                tpms=tpms,
+                attr_name=attr_name,
+                colormap="coolwarm",
+                n_colors=9,
+            )
 
-        return {'FINISHED'}
-    
-class OperatorSphericalTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsProperties, SphericalTpmsProperties):
+        return {"FINISHED"}
+
+
+class OperatorSphericalTpms(
+    bpy.types.Operator,
+    OperatorProperties,
+    AddObjectHelper,
+    TpmsProperties,
+    SphericalTpmsProperties,
+):
     """Add a Spherical TPMS mesh"""
+
     bl_idname = "mesh.spherical_tpms_add"
     bl_label = "Spherical TPMS"
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
         tpms = SphericalTpms(
-            self.radius,
-            self.part,
-            self.surface,
-            self.swap,
-            self.cell_size,
-            self.repeat_cell,
-            self.resolution,
-            self.offset,
-            self.phase_shift
+            radius=self.radius,
+            part=self.part,
+            surface=self.surface,
+            swap=self.swap,
+            cell_size=self.cell_size,
+            repeat_cell=self.repeat_cell,
+            resolution=self.resolution,
+            offset=self.offset,
+            phase_shift=self.phase_shift,
         )
 
         mesh = polydata_to_mesh(tpms.vtk_mesh)
@@ -135,16 +167,23 @@ class OperatorSphericalTpms(bpy.types.Operator, OperatorProperties, AddObjectHel
         object_data_add(context, mesh, operator=self)
 
         attr_name = "surface"
-        mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-        mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+        mesh.attributes.new(attr_name, type="FLOAT", domain="POINT")
+        mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
             bpy.ops.object.shade_smooth(use_auto_smooth=True)
 
         if self.material:
-            apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
+            apply_material(
+                mesh=mesh,
+                tpms=tpms,
+                attr_name=attr_name,
+                colormap="coolwarm",
+                n_colors=9,
+            )
 
-        return {'FINISHED'}
+        return {"FINISHED"}
+
 
 # class OperatorGradedTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties):
 #     """Add a Graded TPMS mesh"""
@@ -198,7 +237,7 @@ class OperatorSphericalTpms(bpy.types.Operator, OperatorProperties, AddObjectHel
 
 def menu_func(self, context):
     # Create the main submenu
-    self.layout.menu("OBJECT_MT_tpms_submenu", icon='MESH_CUBE')
+    self.layout.menu("OBJECT_MT_tpms_submenu", icon="MESH_CUBE")
 
 
 class OBJECT_MT_tpms_submenu(bpy.types.Menu):
@@ -207,11 +246,12 @@ class OBJECT_MT_tpms_submenu(bpy.types.Menu):
 
     def draw(self, context):
         layout = self.layout
-        layout.operator(OperatorTpms.bl_idname, icon='MESH_CUBE')
-        layout.operator(OperatorCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
-        layout.operator(OperatorSphericalTpms.bl_idname, icon='MESH_UVSPHERE')
+        layout.operator(OperatorTpms.bl_idname, icon="MESH_CUBE")
+        layout.operator(OperatorCylindricalTpms.bl_idname, icon="MESH_CYLINDER")
+        layout.operator(OperatorSphericalTpms.bl_idname, icon="MESH_UVSPHERE")
         # layout.operator(OperatorGradedTpms.bl_idname, icon='MESH_CUBE')
         # layout.operator(OperatorGradedCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
+
 
 def register():
     bpy.utils.register_class(OBJECT_MT_tpms_submenu)
