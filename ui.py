@@ -2,6 +2,7 @@ import bpy
 from bpy_extras.object_utils import AddObjectHelper, object_data_add
 
 import numpy as np
+import pyvista as pv
 
 from .tpms import (
     Tpms,
@@ -19,7 +20,7 @@ from .properties import (
 from .material import apply_material
 
 
-def polydata_to_mesh(polydata, mesh_name="Tpms"):
+def polydata_to_mesh(polydata: pv.PolyData, mesh_name: str = "Tpms") -> bpy.types.Mesh:
     """Convert a vtkPolyData to a mesh"""
     faces = []
     if not polydata.is_all_triangles:
@@ -43,16 +44,16 @@ class OperatorTpms(
     bl_label = "TPMS"
     bl_options = {"REGISTER", "UNDO"}
 
-    def execute(self, context):
+    def execute(self, context: bpy.types.Context):
         tpms = Tpms(
-            self.part,
-            self.surface,
-            self.swap,
-            self.cell_size,
-            self.repeat_cell,
-            self.resolution,
-            self.offset,
-            self.phase_shift,
+            part=self.part,
+            surface=self.surface,
+            swap=self.swap,
+            cell_size=self.cell_size,
+            repeat_cell=self.repeat_cell,
+            resolution=self.resolution,
+            offset=self.offset,
+            phase_shift=self.phase_shift,
         )
 
         mesh = polydata_to_mesh(tpms.vtk_mesh)
@@ -94,7 +95,7 @@ class OperatorCylindricalTpms(
     bl_label = "Cylindrical TPMS"
     bl_options = {"REGISTER", "UNDO"}
 
-    def execute(self, context):
+    def execute(self, context: bpy.types.Context):
         tpms = CylindricalTpms(
             radius=self.radius,
             part=self.part,
@@ -146,7 +147,7 @@ class OperatorSphericalTpms(
     bl_label = "Spherical TPMS"
     bl_options = {"REGISTER", "UNDO"}
 
-    def execute(self, context):
+    def execute(self, context: bpy.types.Context):
         tpms = SphericalTpms(
             radius=self.radius,
             part=self.part,

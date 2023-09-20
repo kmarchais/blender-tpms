@@ -3,7 +3,12 @@ import bpy
 import numpy as np
 import matplotlib.pyplot as plt
 
-def apply_material(mesh, tpms, attr_name, colormap, n_colors):
+from .tpms import Tpms
+
+
+def apply_material(
+    mesh: bpy.types.Mesh, tpms: Tpms, attr_name: str, colormap: str, n_colors: int
+):
     if bpy.context.space_data.shading.type not in ["MATERIAL", "RENDERED"]:
         bpy.context.space_data.shading.type = "MATERIAL"
 
@@ -33,12 +38,14 @@ def apply_material(mesh, tpms, attr_name, colormap, n_colors):
         location = i / (n_colors - 1)
         if i != 0:
             color_ramp_node.color_ramp.elements.new(location)
-        color = [c**2.2 for c in cmap(location)] # sRGB to Linear RGB
+        color = [c**2.2 for c in cmap(location)]  # sRGB to Linear RGB
         color_ramp_node.color_ramp.elements[i].color = color
 
     color_ramp_node.select = False
-    color_ramp_node.location = (bsdf.location.x - color_ramp_node.width - 50,
-                                bsdf.location.y)
+    color_ramp_node.location = (
+        bsdf.location.x - color_ramp_node.width - 50,
+        bsdf.location.y,
+    )
     color_ramp_node.label = colormap
 
     bsdf.select = False
@@ -46,15 +53,27 @@ def apply_material(mesh, tpms, attr_name, colormap, n_colors):
     attribute_node.select = False
     map_range_node.select = False
 
-    map_range_node.location = (color_ramp_node.location.x - map_range_node.width - 50,
-                                    bsdf.location.y)
-    attribute_node.location = (map_range_node.location.x - attribute_node.width - 50,
-                                    bsdf.location.y)
+    map_range_node.location = (
+        color_ramp_node.location.x - map_range_node.width - 50,
+        bsdf.location.y,
+    )
+    attribute_node.location = (
+        map_range_node.location.x - attribute_node.width - 50,
+        bsdf.location.y,
+    )
 
-    material.node_tree.links.new(attribute_node.outputs["Fac"], map_range_node.inputs["Value"])
+    material.node_tree.links.new(
+        attribute_node.outputs["Fac"], map_range_node.inputs["Value"]
+    )
 
-    material.node_tree.links.new(map_range_node.outputs["Result"], color_ramp_node.inputs["Fac"])
-    material.node_tree.links.new(color_ramp_node.outputs["Color"], bsdf.inputs["Base Color"])
-    material.node_tree.links.new(bsdf.outputs["BSDF"], material_output_node.inputs["Surface"])
+    material.node_tree.links.new(
+        map_range_node.outputs["Result"], color_ramp_node.inputs["Fac"]
+    )
+    material.node_tree.links.new(
+        color_ramp_node.outputs["Color"], bsdf.inputs["Base Color"]
+    )
+    material.node_tree.links.new(
+        bsdf.outputs["BSDF"], material_output_node.inputs["Surface"]
+    )
 
     bpy.data.objects[mesh.name].data.materials.append(material)
