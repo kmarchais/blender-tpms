@@ -1,7 +1,7 @@
 # TPMS generator
 
 <p align="center">
-  <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/9de3d9ac-03d6-45f2-85e5-3140a5fc67fd"/>
+  <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/05c21e9f-eb8e-4ec4-a21a-7295563dc24b"/>
 </p>
 
 ![TPMS](assets/geo_nodes.png)
