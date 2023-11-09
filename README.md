@@ -5,6 +5,8 @@
   <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/05c21e9f-eb8e-4ec4-a21a-7295563dc24b" width="49%"/>
 </p>
 
+<img src="https://github.com/kmarchais/blender-tpms/assets/22714778/53a50f7f-b294-4cc9-80a5-e571ae1421c4" width="100%"/>
+
 ![TPMS](assets/geo_nodes.png)
 <div>
   <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/df72dbd8-f8d9-4ea8-bb89-02318534f655" width="49%"/>
