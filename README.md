@@ -18,6 +18,9 @@
   <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/abebb339-accb-4e0f-8087-1c0758f6d3c0" width="49%"/>
 </div>
 
+<img src="https://github.com/kmarchais/blender-tpms/assets/22714778/14e6093b-9176-43be-b621-003827cc2aee" width="49%"/>
+
+
 ## Triply Periodic Minimal Surface
 
 How to create a TPMS mesh in Blender:
