@@ -8,7 +8,7 @@ for dependency in dependencies:
         except ImportError:
             import sys
             import subprocess
-            subprocess.call([sys.executable, "-m", "pip", "--user", "install", dependency])
+            subprocess.call([sys.executable, "-m", "pip", "install", dependency])
 
 
 from . import ui
