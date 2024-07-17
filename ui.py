@@ -1,27 +1,37 @@
 import bpy
-from bpy_extras.object_utils import AddObjectHelper, object_data_add
-
 import numpy as np
 import pyvista as pv
+from bpy_extras.object_utils import AddObjectHelper, object_data_add
 
-from .tpms import (
-    Tpms,
-    CylindricalTpms,
-    SphericalTpms,
-    # GradedTpms,
-)
+from .material import apply_material
+
+# GradedTpms,
 from .properties import (
-    TpmsProperties,
     CylindricalTpmsProperties,
-    SphericalTpmsProperties,
     # TpmsGradingProperties,
     OperatorProperties,
+    SphericalTpmsProperties,
+    TpmsProperties,
 )
-from .material import apply_material
+from .tpms import (
+    CylindricalTpms,
+    SphericalTpms,
+    Tpms,
+)
+
+
+def set_shade_auto_smooth() -> None:
+    """Set the auto smooth shading to the active object."""
+    # use kwargs for compatibility with blender > 4.1
+    # `use_auto_smooth` is not a parameter of `shade_smooth` from blender 4.1
+    print(bpy.app.version)
+    kwargs = {"use_auto_smooth": True} if bpy.app.version < (4, 1) else {}
+    print(kwargs)
+    bpy.ops.object.shade_smooth(**kwargs)
 
 
 def polydata_to_mesh(polydata: pv.PolyData, mesh_name: str = "Tpms") -> bpy.types.Mesh:
-    """Convert a vtkPolyData to a mesh"""
+    """Convert a vtkPolyData to a mesh."""
     faces = []
     if not polydata.is_all_triangles:
         polydata = polydata.triangulate()
@@ -38,7 +48,7 @@ def polydata_to_mesh(polydata: pv.PolyData, mesh_name: str = "Tpms") -> bpy.type
 class OperatorTpms(
     bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsProperties
 ):
-    """Add a TPMS mesh"""
+    """Add a TPMS mesh."""
 
     bl_idname = "mesh.tpms_add"
     bl_label = "TPMS"
@@ -68,7 +78,7 @@ class OperatorTpms(
         mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
-            bpy.ops.object.shade_smooth(use_auto_smooth=True)
+            set_shade_auto_smooth()
 
         if self.material:
             apply_material(
@@ -89,7 +99,7 @@ class OperatorCylindricalTpms(
     TpmsProperties,
     CylindricalTpmsProperties,
 ):
-    """Add a Cylindrical TPMS mesh"""
+    """Add a Cylindrical TPMS mesh."""
 
     bl_idname = "mesh.cylindrical_tpms_add"
     bl_label = "Cylindrical TPMS"
@@ -120,7 +130,7 @@ class OperatorCylindricalTpms(
         mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
-            bpy.ops.object.shade_smooth(use_auto_smooth=True)
+            set_shade_auto_smooth()
 
         if self.material:
             apply_material(
@@ -141,7 +151,7 @@ class OperatorSphericalTpms(
     TpmsProperties,
     SphericalTpmsProperties,
 ):
-    """Add a Spherical TPMS mesh"""
+    """Add a Spherical TPMS mesh."""
 
     bl_idname = "mesh.spherical_tpms_add"
     bl_label = "Spherical TPMS"
@@ -172,7 +182,7 @@ class OperatorSphericalTpms(
         mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
         if self.auto_smooth:
-            bpy.ops.object.shade_smooth(use_auto_smooth=True)
+            set_shade_auto_smooth()
 
         if self.material:
             apply_material(
@@ -186,11 +196,18 @@ class OperatorSphericalTpms(
         return {"FINISHED"}
 
 
-# class OperatorGradedTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties):
+# class OperatorGradedTpms(
+#     bpy.types.Operator,
+#     OperatorProperties,
+#     AddObjectHelper,
+#     TpmsGradingProperties,
+#     TpmsProperties,
+# ):
 #     """Add a Graded TPMS mesh"""
+
 #     bl_idname = "mesh.graded_tpms_add"
 #     bl_label = "Graded TPMS"
-#     bl_options = {'REGISTER', 'UNDO'}
+#     bl_options = {"REGISTER", "UNDO"}
 
 #     def execute(self, context):
 #         tpms = GradedTpms(
@@ -214,11 +231,12 @@ class OperatorSphericalTpms(
 #         object_data_add(context, mesh, operator=self)
 
 #         attr_name = "surface"
-#         mesh.attributes.new(attr_name, type='FLOAT', domain='POINT')
-#         mesh.attributes[attr_name].data.foreach_set('value', tpms.vtk_mesh[attr_name])
+#         mesh.attributes.new(attr_name, type="FLOAT", domain="POINT")
+#         mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
 
 #         if self.auto_smooth:
-#             bpy.ops.object.shade_smooth(use_auto_smooth=True)
+#             set_shade_auto_smooth()
+
 
 #         if self.material:
 #             apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
