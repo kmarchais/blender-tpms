@@ -24,9 +24,7 @@ def set_shade_auto_smooth() -> None:
     """Set the auto smooth shading to the active object."""
     # use kwargs for compatibility with blender > 4.1
     # `use_auto_smooth` is not a parameter of `shade_smooth` from blender 4.1
-    print(bpy.app.version)
     kwargs = {"use_auto_smooth": True} if bpy.app.version < (4, 1) else {}
-    print(kwargs)
     bpy.ops.object.shade_smooth(**kwargs)
 
 
