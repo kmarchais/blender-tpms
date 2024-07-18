@@ -9,7 +9,7 @@ for dependency in dependencies:
     if dependency != "pip":
         try:
             blender_tpms = __import__(dependency)
-        except ModuleNotFoundError:
+        except ImportError:
             import importlib
             import subprocess
             import sys
