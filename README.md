@@ -23,8 +23,6 @@
   <img src="https://github.com/kmarchais/blender-tpms/assets/22714778/2d8dacc2-2c5e-42ab-867d-e46fd3e75b88" width="49%"/>
 </div>
 
-
-
 ## Triply Periodic Minimal Surface
 
 How to create a TPMS mesh in Blender:
@@ -34,7 +32,7 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 ## Installation
 
 > :warning: **Blender 3.6 or higher is required**
-
+>
 > :warning: **The installation of this add-on will install the [PyVista](https://docs.pyvista.org/version/stable/) library in your Blender's Python environment**
 
 - Download the ZIP file from this repository
@@ -42,8 +40,8 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 - Enable the add-on by clicking the checkbox (this will install the required python dependencies)
 - You are ready to create TPMS meshes in `Add > Mesh > TPMS`
 
-
 ## Coming Soon
+
 - Lattice structures ![Lattices](assets/lattice.png)
 - Graded TPMS (density, size, type)
 - Ability to modify the TPMS properties even when the operator is not active anymore
@@ -51,4 +49,5 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 If you have a specific feature in mind that you would like to have, or if you're particularly interested in one of the features listed above, please let me know.
 
 ## Useful repository
+
 - To create TPMS geometries and meshes (including periodical meshes) for simulation with Python, consider using [Microgen](https://github.com/3MAH/microgen)
