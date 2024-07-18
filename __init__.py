@@ -1,8 +1,7 @@
 """Blender TPMS addon to generate TPMS meshes."""
 
-module = "blender_tpms"
 try:
-    blender_tpms = __import__(module)
+    import blender_tpms
 except ImportError:
     import importlib
     import site
@@ -24,7 +23,7 @@ except ImportError:
     if user_site not in sys.path:
         sys.path.append(user_site)
 
-    blender_tpms = importlib.import_module(module)
+    importlib.import_module("blender_tpms")
 
 bl_info = {
     "name": "TPMS",
@@ -49,7 +48,3 @@ def register() -> None:
 def unregister() -> None:
     """Unregister the addon."""
     blender_tpms.unregister()
-
-
-register()
-unregister()
