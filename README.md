@@ -34,6 +34,7 @@ https://github.com/kmarchais/blender-tpms/assets/22714778/80af0ecc-1544-418c-bea
 ## Installation
 
 > :warning: **Blender 3.6 or higher is required**
+
 > :warning: **The installation of this add-on will install the [PyVista](https://docs.pyvista.org/version/stable/) library in your Blender's Python environment**
 
 - Download the ZIP file from this repository
