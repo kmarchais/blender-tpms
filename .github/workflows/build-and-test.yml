@@ -30,7 +30,7 @@ jobs:
       - name: Install
         run: |
           pip install uv
-          uv pip install --system blender_tpms@. bpy
+          uv pip install --system blender_tpms@. bpy pytest
 
       - name: Test
         run: pytest tests
