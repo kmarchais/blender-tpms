@@ -28,6 +28,8 @@ def set_shade_auto_smooth() -> None:
     angle = 0.523599  # 30 degrees
     if bpy.app.version < (4, 1):
         bpy.ops.object.shade_smooth(use_auto_smooth=True, auto_smooth_angle=angle)
+    elif bpy.app.version < (4, 2):
+        bpy.ops.object.shade_smooth_by_angle(angle=angle, keep_sharp_edges=True)
     else:
         bpy.ops.object.shade_auto_smooth(use_auto_smooth=True, angle=angle)
 

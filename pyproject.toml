@@ -1,11 +1,21 @@
 [project]
 name = "blender_tpms"
 version = "0.1.0"
-description = "TPMS lib for Blender-TPMS addon."
+description = "TPMS library for the Blender-TPMS addon."
 authors = [{ name = "Kevin Marchais", email = "kevin.marchais@hivelix.io" }]
 dependencies = ["pyvista"]
 readme = "README.md"
 requires-python = ">= 3.8"
+
+[project.optional-dependencies]
+dev = [
+    "bpy",
+    "blender-stubs",
+    # "fake-bpy-module-latest", # https://github.com/nutti/fake-bpy-module?tab=readme-ov-file#supported-blender-version
+    "ruff",
+    "mypy",
+    "pytest",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -16,3 +26,6 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/blender_tpms"]
+
+[tool.ruff.lint]
+select = ["ALL"]
