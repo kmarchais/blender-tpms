@@ -77,18 +77,18 @@ class Tpms:
             err_msg = "repeat_cell must be an int or a sequence of 3 ints"
             raise ValueError(err_msg)
 
-    def vtk_sheet(self) -> pv.PolyData:
+    def vtk_sheet(self) -> pv.UnstructuredGrid:
         """Sheet surface of the TPMS geometry."""
         return self.grid.clip_scalar(scalars="upper_surface").clip_scalar(
             scalars="lower_surface",
             invert=False,
         )
 
-    def vtk_upper_skeletal(self) -> pv.PolyData:
+    def vtk_upper_skeletal(self) -> pv.UnstructuredGrid:
         """Upper skeletal surface of the TPMS geometry."""
         return self.grid.clip_scalar(scalars="upper_surface", invert=False)
 
-    def vtk_lower_skeletal(self) -> pv.PolyData:
+    def vtk_lower_skeletal(self) -> pv.UnstructuredGrid:
         """Lower skeletal surface of the TPMS geometry."""
         return self.grid.clip_scalar(scalars="lower_surface")
 

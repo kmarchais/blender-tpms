@@ -9,7 +9,7 @@ import bpy
 import numpy as np
 
 if TYPE_CHECKING:
-    import pyvista as pv
+    import pyvista as pv  # pragma: no cover
 
 
 def polydata_to_mesh(polydata: pv.PolyData, mesh_name: str = "Tpms") -> bpy.types.Mesh:
