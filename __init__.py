@@ -1,20 +1,27 @@
-import bpy
+"""Blender TPMS addon to generate TPMS meshes."""
 
 dependencies = {
     "pip": {},
-    "pyvista": {"url": "https://github.com/pyvista/pyvista"},
+    "blender_tpms": {},
 }
 
 for dependency in dependencies:
     if dependency != "pip":
         try:
             __import__(dependency)
-        except ImportError:
+        except (ImportError, ModuleNotFoundError):
             import importlib
             import subprocess
             import sys
+            from pathlib import Path
 
-            cmd = [sys.executable, "-m", "pip", "install", "--user", dependency]
+            cmd = [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                Path(__file__).parent,
+            ]
             subprocess.check_call(cmd)
 
             from site import getusersitepackages
@@ -26,7 +33,7 @@ for dependency in dependencies:
             importlib.import_module(dependency)
 
 
-from . import ui
+from blender_tpms import ui
 
 bl_info = {
     "name": "TPMS",
@@ -41,9 +48,11 @@ bl_info = {
 }
 
 
-def register():
+def register() -> None:
+    """Register the addon."""
     ui.register()
 
 
-def unregister():
+def unregister() -> None:
+    """Unregister the addon."""
     ui.unregister()

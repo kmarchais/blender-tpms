@@ -1,19 +1,22 @@
+"""Module for the user interface of the TPMS add-on."""
+
+from __future__ import annotations
+
 import bpy
-import numpy as np
-import pyvista as pv
 from bpy_extras.object_utils import AddObjectHelper, object_data_add
 
-from .material import apply_material
+from blender_tpms.interface import polydata_to_mesh
+from blender_tpms.material import apply_material
 
 # GradedTpms,
-from .properties import (
+from blender_tpms.properties import (
     CylindricalTpmsProperties,
     # TpmsGradingProperties,
     OperatorProperties,
     SphericalTpmsProperties,
     TpmsProperties,
 )
-from .tpms import (
+from blender_tpms.tpms import (
     CylindricalTpms,
     SphericalTpms,
     Tpms,
@@ -29,31 +32,20 @@ def set_shade_auto_smooth() -> None:
         bpy.ops.object.shade_auto_smooth(use_auto_smooth=True, angle=angle)
 
 
-def polydata_to_mesh(polydata: pv.PolyData, mesh_name: str = "Tpms") -> bpy.types.Mesh:
-    """Convert a vtkPolyData to a mesh."""
-    faces = []
-    if not polydata.is_all_triangles:
-        polydata = polydata.triangulate()
-    polydata.flip_normals()
-    faces = np.reshape(polydata.faces, (polydata.n_faces, 4))[:, 1:]
-
-    mesh = bpy.data.meshes.new(mesh_name)
-    mesh.from_pydata(vertices=polydata.points, edges=[], faces=faces)
-    mesh.update()
-
-    return mesh
-
-
 class OperatorTpms(
-    bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsProperties
+    bpy.types.Operator,
+    OperatorProperties,
+    AddObjectHelper,
+    TpmsProperties,
 ):
     """Add a TPMS mesh."""
 
     bl_idname = "mesh.tpms_add"
     bl_label = "TPMS"
-    bl_options = {"REGISTER", "UNDO"}
+    bl_options = {"REGISTER", "UNDO"}  # noqa: RUF012 (blender uses type hints for another purpose)
 
-    def execute(self, context: bpy.types.Context):
+    def execute(self, context: bpy.types.Context) -> set[str]:
+        """Execute the operator."""
         tpms = Tpms(
             part=self.part,
             surface=self.surface,
@@ -102,9 +94,10 @@ class OperatorCylindricalTpms(
 
     bl_idname = "mesh.cylindrical_tpms_add"
     bl_label = "Cylindrical TPMS"
-    bl_options = {"REGISTER", "UNDO"}
+    bl_options = {"REGISTER", "UNDO"}  # noqa: RUF012 (blender uses type hints for another purpose)
 
-    def execute(self, context: bpy.types.Context):
+    def execute(self, context: bpy.types.Context) -> set[str]:
+        """Execute the operator."""
         tpms = CylindricalTpms(
             radius=self.radius,
             part=self.part,
@@ -154,9 +147,10 @@ class OperatorSphericalTpms(
 
     bl_idname = "mesh.spherical_tpms_add"
     bl_label = "Spherical TPMS"
-    bl_options = {"REGISTER", "UNDO"}
+    bl_options = {"REGISTER", "UNDO"}  # noqa: RUF012 (blender uses type hints for another purpose)
 
-    def execute(self, context: bpy.types.Context):
+    def execute(self, context: bpy.types.Context) -> set[str]:
+        """Execute the operator."""
         tpms = SphericalTpms(
             radius=self.radius,
             part=self.part,
@@ -206,7 +200,7 @@ class OperatorSphericalTpms(
 
 #     bl_idname = "mesh.graded_tpms_add"
 #     bl_label = "Graded TPMS"
-#     bl_options = {"REGISTER", "UNDO"}
+#     bl_options = {"REGISTER", "UNDO"}  # noqa: RUF012 (blender uses type hints for another purpose)
 
 #     def execute(self, context):
 #         tpms = GradedTpms(
@@ -236,14 +230,26 @@ class OperatorSphericalTpms(
 #         if self.auto_smooth:
 #             set_shade_auto_smooth()
 
-
 #         if self.material:
-#             apply_material(mesh=mesh, tpms=tpms, attr_name=attr_name, colormap="coolwarm", n_colors=9)
+#             apply_material(
+#                 mesh=mesh,
+#                 tpms=tpms,
+#                 attr_name=attr_name,
+#                 colormap="coolwarm",
+#                 n_colors=9,
+#             )
 
-#         return {'FINISHED'}
+#         return {"FINISHED"}
 
 
-# class OperatorGradedCylindricalTpms(bpy.types.Operator, OperatorProperties, AddObjectHelper, TpmsGradingProperties, TpmsProperties, CylindricalTpmsProperties):
+# class OperatorGradedCylindricalTpms(
+#     bpy.types.Operator,
+#     OperatorProperties,
+#     AddObjectHelper,
+#     TpmsGradingProperties,
+#     TpmsProperties,
+#     CylindricalTpmsProperties,
+# ):
 #     """Add a Graded Cylindrical TPMS mesh"""
 #     bl_idname = "mesh.cylindrical_graded_tpms_add"
 #     bl_label = "Graded Cylindrical TPMS"
@@ -253,16 +259,19 @@ class OperatorSphericalTpms(
 #         return {'FINISHED'}
 
 
-def menu_func(self, context):
-    # Create the main submenu
+def menu_func(self, _: bpy.types.Context) -> None:
+    """Create the main submenu."""
     self.layout.menu("OBJECT_MT_tpms_submenu", icon="MESH_CUBE")
 
 
-class OBJECT_MT_tpms_submenu(bpy.types.Menu):
+class OBJECT_MT_tpms_submenu(bpy.types.Menu):  # noqa: N801
+    """Create the TPMS submenu."""
+
     bl_label = "TPMS"
     bl_idname = "OBJECT_MT_tpms_submenu"
 
-    def draw(self, context):
+    def draw(self, _: bpy.types.Context) -> None:
+        """Draw the menu."""
         layout = self.layout
         layout.operator(OperatorTpms.bl_idname, icon="MESH_CUBE")
         layout.operator(OperatorCylindricalTpms.bl_idname, icon="MESH_CYLINDER")
@@ -271,7 +280,8 @@ class OBJECT_MT_tpms_submenu(bpy.types.Menu):
         # layout.operator(OperatorGradedCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
 
 
-def register():
+def register() -> None:
+    """Register the UI elements."""
     bpy.utils.register_class(OBJECT_MT_tpms_submenu)
     bpy.utils.register_class(OperatorTpms)
     bpy.utils.register_class(OperatorCylindricalTpms)
@@ -281,7 +291,8 @@ def register():
     bpy.types.VIEW3D_MT_mesh_add.append(menu_func)
 
 
-def unregister():
+def unregister() -> None:
+    """Unregister the UI elements."""
     bpy.utils.unregister_class(OBJECT_MT_tpms_submenu)
     bpy.utils.unregister_class(OperatorTpms)
     bpy.utils.unregister_class(OperatorCylindricalTpms)
