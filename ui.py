@@ -22,10 +22,11 @@ from .tpms import (
 
 def set_shade_auto_smooth() -> None:
     """Set the auto smooth shading to the active object."""
-    # use kwargs for compatibility with blender > 4.1
-    # `use_auto_smooth` is not a parameter of `shade_smooth` from blender 4.1
-    kwargs = {"use_auto_smooth": True} if bpy.app.version < (4, 1) else {}
-    bpy.ops.object.shade_smooth(**kwargs)
+    angle = 0.523599  # 30 degrees
+    if bpy.app.version < (4, 1):
+        bpy.ops.object.shade_smooth(use_auto_smooth=True, auto_smooth_angle=angle)
+    else:
+        bpy.ops.object.shade_auto_smooth(use_auto_smooth=True, angle=angle)
 
 
 def polydata_to_mesh(polydata: pv.PolyData, mesh_name: str = "Tpms") -> bpy.types.Mesh:
