@@ -9,7 +9,7 @@ for dependency in dependencies:
     if dependency != "pip":
         try:
             __import__(dependency)
-        except ImportError, ModuleNotFoundError:
+        except (ImportError, ModuleNotFoundError) as error:
             import importlib
             import subprocess
             import sys
