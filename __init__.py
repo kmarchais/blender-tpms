@@ -8,8 +8,8 @@ dependencies = {
 for dependency in dependencies:
     if dependency != "pip":
         try:
-            __import__(dependency)
-        except (ImportError, ModuleNotFoundError) as error:
+            blender_tpms = __import__(dependency)
+        except ModuleNotFoundError:
             import importlib
             import subprocess
             import sys
@@ -20,7 +20,7 @@ for dependency in dependencies:
                 "-m",
                 "pip",
                 "install",
-                Path(__file__).parent,
+                str(Path(__file__).parent),
             ]
             subprocess.check_call(cmd)
 
@@ -30,10 +30,7 @@ for dependency in dependencies:
             if user_site not in sys.path:
                 sys.path.append(user_site)
 
-            importlib.import_module(dependency)
-
-
-from blender_tpms import ui
+            blender_tpms = importlib.import_module(dependency)
 
 bl_info = {
     "name": "TPMS",
@@ -47,12 +44,18 @@ bl_info = {
     "category": "Add Mesh",
 }
 
+import blender_tpms
+
 
 def register() -> None:
     """Register the addon."""
-    ui.register()
+    blender_tpms.register()
 
 
 def unregister() -> None:
     """Unregister the addon."""
-    ui.unregister()
+    blender_tpms.unregister()
+
+
+register()
+unregister()
