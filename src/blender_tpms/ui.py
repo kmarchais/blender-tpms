@@ -11,7 +11,6 @@ from blender_tpms.material import apply_material
 # GradedTpms,
 from blender_tpms.properties import (
     CylindricalTpmsProperties,
-    CylindricalTwistedTpmsProperties,
     # TpmsGradingProperties,
     OperatorProperties,
     SphericalTpmsProperties,
@@ -19,7 +18,6 @@ from blender_tpms.properties import (
 )
 from blender_tpms.tpms import (
     CylindricalTpms,
-    CylindricalTwistedTpms,
     SphericalTpms,
     Tpms,
 )
@@ -107,6 +105,7 @@ class OperatorCylindricalTpms(
             swap=self.swap,
             cell_size=self.cell_size,
             repeat_cell=self.repeat_cell,
+            twist_rate=self.twist_rate,
             resolution=self.resolution,
             offset=self.offset,
             phase_shift=self.phase_shift,
@@ -117,60 +116,6 @@ class OperatorCylindricalTpms(
         self.density = f"{tpms.relative_density:.1%}"
 
         # add the mesh as an object into the scene with this utility module
-        object_data_add(context, mesh, operator=self)
-
-        attr_name = "surface"
-        mesh.attributes.new(attr_name, type="FLOAT", domain="POINT")
-        mesh.attributes[attr_name].data.foreach_set("value", tpms.vtk_mesh[attr_name])
-
-        if self.auto_smooth:
-            set_shade_auto_smooth()
-
-        if self.material:
-            apply_material(
-                mesh=mesh,
-                tpms=tpms,
-                attr_name=attr_name,
-                colormap="coolwarm",
-                n_colors=9,
-            )
-
-        return {"FINISHED"}
-
-
-class OperatorCylindricalTwistedTpms(
-    bpy.types.Operator,
-    OperatorProperties,
-    AddObjectHelper,
-    TpmsProperties,
-    CylindricalTwistedTpmsProperties,
-):
-    """Add a Twisted Cylindrical TPMS mesh."""
-
-    bl_idname = "mesh.cylindrical_twisted_tpms_add"
-    bl_label = "Cylinder Twist"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context: bpy.types.Context) -> set[str]:
-        """Execute the operator."""
-        tpms = CylindricalTwistedTpms(
-            radius=self.radius,
-            twist_rate=self.twist_rate,  # Use the new twist_rate property
-            part=self.part,
-            surface=self.surface,
-            swap=self.swap,
-            cell_size=self.cell_size,
-            repeat_cell=self.repeat_cell,
-            resolution=self.resolution,
-            offset=self.offset,
-            phase_shift=self.phase_shift,
-        )
-
-        mesh = polydata_to_mesh(tpms.vtk_mesh)
-
-        self.density = f"{tpms.relative_density:.1%}"
-
-        # Add the mesh as an object into the scene with this utility module
         object_data_add(context, mesh, operator=self)
 
         attr_name = "surface"
@@ -331,7 +276,6 @@ class OBJECT_MT_tpms_submenu(bpy.types.Menu):  # noqa: N801
         layout = self.layout
         layout.operator(OperatorTpms.bl_idname, icon="MESH_CUBE")
         layout.operator(OperatorCylindricalTpms.bl_idname, icon="MESH_CYLINDER")
-        layout.operator(OperatorCylindricalTwistedTpms.bl_idname, icon="MESH_CYLINDER")
         layout.operator(OperatorSphericalTpms.bl_idname, icon="MESH_UVSPHERE")
         # layout.operator(OperatorGradedTpms.bl_idname, icon='MESH_CUBE')
         # layout.operator(OperatorGradedCylindricalTpms.bl_idname, icon='MESH_CYLINDER')
@@ -343,7 +287,6 @@ def register() -> None:
     bpy.utils.register_class(OperatorTpms)
     bpy.utils.register_class(OperatorCylindricalTpms)
     bpy.utils.register_class(OperatorSphericalTpms)
-    bpy.utils.register_class(CylindricalTwistedTpms)
     # bpy.utils.register_class(OperatorGradedTpms)
     # bpy.utils.register_class(OperatorGradedCylindricalTpms)
     bpy.types.VIEW3D_MT_mesh_add.append(menu_func)
@@ -354,7 +297,6 @@ def unregister() -> None:
     bpy.utils.unregister_class(OBJECT_MT_tpms_submenu)
     bpy.utils.unregister_class(OperatorTpms)
     bpy.utils.unregister_class(OperatorCylindricalTpms)
-    bpy.utils.unregister_class(CylindricalTwistedTpmsProperties)
     bpy.utils.unregister_class(OperatorSphericalTpms)
     # bpy.utils.unregister_class(OperatorGradedTpms)
     # bpy.utils.unregister_class(OperatorGradedCylindricalTpms)

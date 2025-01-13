@@ -1,6 +1,6 @@
 [project]
 name = "blender_tpms"
-version = "0.1.0"
+version = "0.2.0"
 description = "TPMS library for the Blender-TPMS addon."
 authors = [{ name = "Kevin Marchais", email = "kevin.marchais@hivelix.io" }]
 dependencies = ["pyvista"]

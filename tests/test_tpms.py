@@ -20,8 +20,9 @@ def test_cylindrical_tpms() -> None:
 
     assert tpms.relative_density > 0
 
-
 def test_spherical_tpms() -> None:
     tpms = SphericalTpms()
 
     assert tpms.relative_density > 0
+
+

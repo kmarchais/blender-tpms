@@ -212,10 +212,12 @@ class CylindricalTpms(Tpms):
         radius: float = 1.0,
         cell_size: float | Sequence[float] | np.ndarray = 1.0,
         repeat_cell: int | Sequence[int] | np.ndarray = 1,
+        twist_rate: float = 0.0,
         **kwargs,
     ) -> None:
         """Create a cylindrical TPMS geometry."""
         self._init_cell_parameters(cell_size, repeat_cell)
+        self.twist_rate = twist_rate
 
         self.cylinder_radius = radius
 
@@ -253,64 +255,8 @@ class CylindricalTpms(Tpms):
         z: np.ndarray,
     ) -> pv.StructuredGrid:
         rho = x + self.cylinder_radius
-        theta = y * self.unit_theta
+        theta = y * self.unit_theta + self.twist_rate * z
 
-        return pv.StructuredGrid(rho * np.cos(theta), rho * np.sin(theta), z)
-
-
-class CylindricalTwistedTpms(Tpms):
-    """Cylindrical TPMS geometry with a twist."""
-
-    def __init__(
-        self,
-        radius: float = 1.0,
-        cell_size: float | Sequence[float] | np.ndarray = 1.0,
-        repeat_cell: int | Sequence[int] | np.ndarray = 1,
-        twist_rate: float = 0.0,  # New parameter for twist rate
-        **kwargs,
-    ) -> None:
-        """Create a cylindrical TPMS geometry with a twist."""
-        self._init_cell_parameters(cell_size, repeat_cell)
-
-        self.cylinder_radius = radius
-        self.twist_rate = twist_rate  # Store the twist rate
-
-        unit_theta = self.cell_size[1] / radius
-        n_repeat_to_full_circle = int(round(2 * np.pi / unit_theta))
-        self.unit_theta = 2 * np.pi / n_repeat_to_full_circle
-        if self.repeat_cell[1] == 0 or self.repeat_cell[1] > n_repeat_to_full_circle:
-            self.repeat_cell[1] = n_repeat_to_full_circle
-
-        super().__init__(
-            cell_size=self.cell_size,
-            repeat_cell=self.repeat_cell,
-            **kwargs,
-        )
-
-    @property
-    def relative_density(self) -> float:
-        """Relative density of the geometry."""
-        if self._relative_density is not None:
-            return self._relative_density
-        grid_volume = (
-            self.cylinder_radius
-            * self.cell_size[0]
-            * self.unit_theta
-            * self.cell_size[2]
-            * np.prod(self.repeat_cell)
-        )
-        self._relative_density = self.vtk_mesh.volume / grid_volume
-        return self._relative_density
-
-    def _create_grid(
-        self,
-        x: np.ndarray,
-        y: np.ndarray,
-        z: np.ndarray,
-    ) -> pv.StructuredGrid:
-        """Create a grid with a twist effect."""
-        rho = x + self.cylinder_radius
-        theta = y * self.unit_theta + self.twist_rate * z  # Add twist based on z
         return pv.StructuredGrid(rho * np.cos(theta), rho * np.sin(theta), z)
 
 
