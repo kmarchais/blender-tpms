@@ -127,6 +127,26 @@ class CylindricalTpmsProperties(bpy.types.PropertyGroup):
     )
 
 
+class CylindricalTwistedTpmsProperties(bpy.types.PropertyGroup):
+    """Properties for the twisted cylindrical TPMS mesh."""
+
+    radius: FloatProperty(
+        name="Radius",
+        description="Radius of the cylinder",
+        default=1,
+        min=0.5,
+        options={"ANIMATABLE", "SKIP_SAVE"},
+    )
+
+    twist_rate: FloatProperty(
+        name="Twist Rate",
+        description="Rate of twist applied along the cylinder's height",
+        default=0.0,
+        min=0.0,  # No twist by default
+        options={"ANIMATABLE", "SKIP_SAVE"},
+    )
+
+
 class SphericalTpmsProperties(bpy.types.PropertyGroup):
     """Properties for the spherical TPMS mesh."""
 
