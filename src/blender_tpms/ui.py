@@ -105,6 +105,7 @@ class OperatorCylindricalTpms(
             swap=self.swap,
             cell_size=self.cell_size,
             repeat_cell=self.repeat_cell,
+            twist_rate=self.twist_rate,
             resolution=self.resolution,
             offset=self.offset,
             phase_shift=self.phase_shift,

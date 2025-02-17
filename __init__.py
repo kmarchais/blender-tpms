@@ -28,7 +28,7 @@ except ImportError:
 bl_info = {
     "name": "TPMS",
     "author": "kmarchais",
-    "version": (0, 1),
+    "version": (0, 2, 0),
     "blender": (3, 6, 0),
     "location": "Add > TPMS",
     "description": "Create a TPMS mesh",

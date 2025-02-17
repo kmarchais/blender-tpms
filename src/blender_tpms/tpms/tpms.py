@@ -212,10 +212,12 @@ class CylindricalTpms(Tpms):
         radius: float = 1.0,
         cell_size: float | Sequence[float] | np.ndarray = 1.0,
         repeat_cell: int | Sequence[int] | np.ndarray = 1,
+        twist_rate: float = 0.0,
         **kwargs,
     ) -> None:
         """Create a cylindrical TPMS geometry."""
         self._init_cell_parameters(cell_size, repeat_cell)
+        self.twist_rate = twist_rate
 
         self.cylinder_radius = radius
 
@@ -253,7 +255,7 @@ class CylindricalTpms(Tpms):
         z: np.ndarray,
     ) -> pv.StructuredGrid:
         rho = x + self.cylinder_radius
-        theta = y * self.unit_theta
+        theta = y * self.unit_theta + self.twist_rate * z
 
         return pv.StructuredGrid(rho * np.cos(theta), rho * np.sin(theta), z)
 
